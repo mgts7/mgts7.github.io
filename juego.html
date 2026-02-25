@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Las enseñanzas de Celso</title>
+<style>
+  /* === Basado en tu css: tipografías, color y estilo general (adaptado) === */
+  :root{
+    --bg: #EAF7FB;
+    --panel-bg: #ffffff;
+    --border: #000;
+    --accent: #6A5ADF; /* morado suave usado en elementos */
+    --correct: #b6f0b5;
+    --error: #ffd6d6;
+  }
+
+  @font-face {
+    font-family: "Moon";
+    src: url("../fonts/Moon-Regular.woff2") format("woff2"),
+         url("../fonts/Moon-Regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Moon";
+    src: url("../fonts/Moon-Bold.woff2") format("woff2"),
+         url("../fonts/Moon-Bold.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  *{ box-sizing: border-box; font-family: "Moon", Arial, sans-serif; text-align: center; -webkit-tap-highlight-color: transparent; }
+  body{
+    margin:0;
+    padding:20px;
+    background: var(--bg);
+    color: #111;
+  }
+
+  /* Header / texto intro */
+  .container{
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 10px;
+  }
+  h1{
+    display: inline-block;
+    padding: 8px 12px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--panel-bg);
+    margin: 8px auto;
+    font-weight: bold;
+  }
+  p.lead{
+    margin: 12px auto 20px;
+    padding: 10px;
+    border: 2px solid var(--border);
+    border-radius:8px;
+    background: var(--panel-bg);
+    max-width: 820px;
+  }
+
+  /* Juego: zonas y cajas */
+  .game {
+    display:flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin: 10px 0 18px;
+  }
+
+  .column {
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--panel-bg);
+    padding: 10px;
+    width: 420px;
+    max-width: 95%;
+    min-width: 240px;
+  }
+
+  .column h3{ margin: 0 0 8px; padding: 4px; font-size: 18px; }
+
+  .grid{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 6px;
+  }
+
+  .card{
+    border: 2px solid #222;
+    border-radius: 6px;
+    padding: 12px 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform .15s ease, background-color .18s ease, opacity .3s ease;
+    background: white;
+    font-size: 16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .card:hover{ transform: translateY(-3px); }
+  .card.selected{ outline: 3px solid rgba(106,90,205,0.15); transform: translateY(-2px); background: #f4f1ff;}
+  .card.found{ background: var(--correct); color: #064b13; font-weight: bold; opacity: 0; pointer-events: none; transform: scale(.98); }
+
+  /* Estilo que se aplica brevemente cuando es correcto (verde y desaparecer) */
+  .card.correct {
+    background: #98e79a !important;
+    color: #064b13 !important;
+    border-color: #0a6b1a !important;
+    animation: vanish .6s forwards;
+  }
+
+  @keyframes vanish {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: translateY(-8px) scale(.95); }
+  }
+
+  /* Shake para error */
+  .card.shake {
+    animation: shake .45s;
+  }
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-6px); }
+    80% { transform: translateX(4px); }
+    100% { transform: translateX(0); }
+  }
+
+  /* Vidas */
+  .lives {
+    margin-top: 6px;
+    display:flex;
+    gap:8px;
+    align-items:center;
+    justify-content:center;
+  }
+  .heart{
+    width:34px;
+    height:34px;
+    border-radius:6px;
+    border:2px solid #880000;
+    background: #ffefef;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    color:#880000;
+  }
+  .heart.lost{
+    opacity: .28;
+    filter: grayscale(60%);
+    background: #fff;
+  }
+
+  /* Mensaje al ganar */
+  .overlay {
+    position: fixed;
+    left:0; right:0; top:0; bottom:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background: rgba(0,0,0,0.45);
+    z-index: 9999;
+  }
+  .overlay.show { display:flex; }
+  .modal {
+    background:white;
+    padding:18px;
+    border-radius:10px;
+    text-align:center;
+    border: 3px solid var(--border);
+    max-width: 90%;
+  }
+  .modal h2{ margin:6px 0 12px; }
+  .modal img{ max-width:180px; display:block; margin: 8px auto 0; }
+
+  /* Mensaje de vidas agotadas */
+  .notice {
+    margin-top: 12px;
+    font-weight: bold;
+    color:#b10b0b;
+  }
+
+  /* Responsivo simple */
+  @media (max-width:880px){
+    .game{ flex-direction: column; align-items: center; }
+    .column{ width: 95%; }
+  }
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Las enseñanzas de Celso</h1>
+
+    <p class="lead"><strong>Celso</strong> fue un filósofo griego del siglo II que escribió una de las primeras <strong>críticas</strong> completas contra el cristianismo. Selecciona una <strong>palabra</strong> y luego su <strong>definición</strong> según lo que decía Celso. Si <strong>fallas 2 veces</strong>, el juego se reinicia. Suerte!!!</p>
+
+    <div class="game" id="game">
+      <div class="column" id="wordsColumn" aria-label="Palabras">
+        <h3>Palabras</h3>
+        <div class="grid" id="wordsGrid"></div>
+      </div>
+
+      <div class="column" id="defsColumn" aria-label="Definiciones">
+        <h3>Definiciones</h3>
+        <div class="grid" id="defsGrid"></div>
+      </div>
+    </div>
+
+    <div style="text-align:center;">
+      <div><strong>Vidas</strong></div>
+      <div class="lives" id="livesBox"></div>
+      <div class="notice" id="notice" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <!-- Overlay final -->
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h2>¡Felicidades!</h2>
+      <img src="ganador.png" alt="Trofeo ganador (pon ganador.png en la carpeta)" />
+      <div style="margin-top:8px;">
+        <button id="playAgainBtn" style="padding:8px 12px; font-weight:bold; border-radius:8px; cursor:pointer;">Jugar de nuevo</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+/*
+  Lógica JS del juego:
+  - pairs: lista de parejas {word, def}
+  - las definiciones se muestran mezcladas
+  - seleccion: se permite escoger una palabra y una definición (en cualquier orden)
+  - comprobación: si coinciden => correct, desaparecer; si no => shake y restar vida
+*/
+
+const pairs = [
+  { word: "Cristianismo", def: "Grupo reciente que rompe con las costumbres antiguas y pone en riesgo las tradiciones que durante siglos habían unido a la sociedad." },
+  { word: "Jesús", def: "Personaje del que se cuentan hechos sorprendentes, pero cuyos relatos, según él, tienen versiones distintas y detalles difíciles de comprobar." },
+  { word: "Imperio romano", def: "Sistema político que debía mantenerse fuerte y unido, y que no debía verse afectado por movimientos nuevos que rechazaran sus prácticas públicas." },
+  { word: "Milagros", def: "Relatos extraordinarios que podían explicarse de otras maneras como trucos de magia y no demostraban necesariamente algo divino." },
+  { word: "Resurrección", def: "Historia central cristiana que, desde su punto de vista, se basa en testimonios limitados y poco convincentes." },
+  { word: "Seguidores", def: "Personas que aceptaban enseñanzas sin analizarlas a fondo y se dejaban llevar más por la fe y los sentimientos que por la razón." },
+  { word: "Tradición antigua", def: "Conjunto de creencias y costumbres heredadas que él defendía frente a ideas nuevas que consideraba inestables." },
+  { word: "Judaísmo", def: "Comunidad que afirma tener una relación especial con lo divino, pero que según Celso también presenta relatos y normas que pueden ponerse en duda." }
+];
+
+let state = {
+  total: pairs.length,
+  matched: 0,
+  lives: 2,
+  mistakes: 0,
+  selectedWordId: null,
+  selectedDefId: null,
+  mapping: {}, // idWord => idDef
+  wordElements: {},
+  defElements: {}
+};
+
+const wordsGrid = document.getElementById('wordsGrid');
+const defsGrid = document.getElementById('defsGrid');
+const livesBox = document.getElementById('livesBox');
+const notice = document.getElementById('notice');
+const overlay = document.getElementById('overlay');
+const playAgainBtn = document.getElementById('playAgainBtn');
+
+function shuffle(arr){
+  for(let i = arr.length -1; i>0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function initGame(){
+  // reset state
+  state.matched = 0;
+  state.lives = 2;
+  state.mistakes = 0;
+  state.selectedWordId = null;
+  state.selectedDefId = null;
+  state.mapping = {};
+  state.wordElements = {};
+  state.defElements = {};
+  notice.textContent = "";
+
+  // prepare items
+  wordsGrid.innerHTML = "";
+  defsGrid.innerHTML = "";
+
+  // create ordered ids for words, shuffle defs
+  const ids = pairs.map((p,i)=>i);
+  const defs = pairs.map((p,i)=>({id:i, text:p.def}));
+  shuffle(defs);
+
+  // mapping: for each word id i, find the def id's position in defs array index
+  // but we'll store mapping as wordId => defId (original id)
+  pairs.forEach((p,i) => state.mapping[i] = i);
+
+  // build DOM: left words in original order
+  pairs.forEach((p,i) => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.textContent = p.word;
+    div.dataset.type = 'word';
+    div.dataset.id = i;
+    div.setAttribute('role', 'button');
+    div.addEventListener('click', handleClick);
+    wordsGrid.appendChild(div);
+    state.wordElements[i] = div;
+  });
+
+  // build defs shuffled
+  defs.forEach((d, placeIndex) => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.textContent = d.text;
+    div.dataset.type = 'def';
+    div.dataset.id = d.id; // original id — used to compare
+    div.setAttribute('role', 'button');
+    div.addEventListener('click', handleClick);
+    defsGrid.appendChild(div);
+    state.defElements[d.id] = div;
+  });
+
+  renderLives();
+  overlay.classList.remove('show');
+}
+
+function renderLives(){
+  livesBox.innerHTML = "";
+  for(let i=0;i<2;i++){
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.innerHTML = '❤';
+    if(i >= state.lives) h.classList.add('lost');
+    livesBox.appendChild(h);
+  }
+}
+
+function clearSelections(){
+  // remove selected classes
+  if(state.selectedWordId !== null){
+    const el = state.wordElements[state.selectedWordId];
+    if(el) el.classList.remove('selected');
+  }
+  if(state.selectedDefId !== null){
+    const el = state.defElements[state.selectedDefId];
+    if(el) el.classList.remove('selected');
+  }
+  state.selectedWordId = null;
+  state.selectedDefId = null;
+}
+
+function handleClick(e){
+  const el = e.currentTarget;
+  if(!el || el.classList.contains('found') || el.classList.contains('correct')) return;
+
+  const type = el.dataset.type;
+  const id = parseInt(el.dataset.id, 10);
+
+  // If clicking a word
+  if(type === 'word'){
+    // if same clicked twice: deselect
+    if(state.selectedWordId === id){
+      el.classList.remove('selected');
+      state.selectedWordId = null;
+      return;
+    }
+    // mark new selection (and unselect previous word if any)
+    if(state.selectedWordId !== null){
+      const prev = state.wordElements[state.selectedWordId];
+      if(prev) prev.classList.remove('selected');
+    }
+    el.classList.add('selected');
+    state.selectedWordId = id;
+
+    // If a definition was selected first, evaluate now
+    if(state.selectedDefId !== null){
+      evaluatePair();
+    }
+    return;
+  }
+
+  // If clicking a definition
+  if(type === 'def'){
+    if(state.selectedDefId === id){
+      el.classList.remove('selected');
+      state.selectedDefId = null;
+      return;
+    }
+    if(state.selectedDefId !== null){
+      const prev = state.defElements[state.selectedDefId];
+      if(prev) prev.classList.remove('selected');
+    }
+    el.classList.add('selected');
+    state.selectedDefId = id;
+
+    // If a word already selected, evaluate
+    if(state.selectedWordId !== null){
+      evaluatePair();
+    }
+    return;
+  }
+}
+
+function evaluatePair(){
+  const wId = state.selectedWordId;
+  const dId = state.selectedDefId;
+  if(wId === null || dId === null) return;
+
+  const wordEl = state.wordElements[wId];
+  const defEl = state.defElements[dId];
+
+  // correct if mapping[wId] === dId
+  const correct = (state.mapping[wId] === dId);
+
+  if(correct){
+    // mark correct: both become green and disappear
+    wordEl.classList.remove('selected');
+    defEl.classList.remove('selected');
+
+    wordEl.classList.add('correct');
+    defEl.classList.add('correct');
+
+    // after animation, mark as found/invisible
+    setTimeout(()=>{
+      wordEl.classList.add('found');
+      defEl.classList.add('found');
+      wordEl.style.display = 'none';
+      defEl.style.display = 'none';
+    }, 600);
+
+    state.matched++;
+    clearSelections();
+
+    // check win
+    if(state.matched >= state.total){
+      // show overlay final
+      setTimeout(() => {
+        overlay.classList.add('show');
+      }, 450);
+    }
+  } else {
+    // error: shake both, decrement life
+    wordEl.classList.remove('selected');
+    defEl.classList.remove('selected');
+
+    wordEl.classList.add('shake');
+    defEl.classList.add('shake');
+
+    setTimeout(()=>{
+      wordEl.classList.remove('shake');
+      defEl.classList.remove('shake');
+    }, 460);
+
+    state.lives--;
+    state.mistakes++;
+    renderLives();
+
+    if(state.lives <= 0){
+      // small delay to let user see the last shake
+      setTimeout(()=> {
+        resetAll();
+      }, 700);
+    } else {
+      // clear selection for next try
+      setTimeout(()=> {
+        notice.textContent = "";
+      }, 2000);
+    }
+    clearSelections();
+  }
+}
+
+function resetAll(){
+  // re-show all cards and reshuffle
+  // For a full reset, reinitialize game
+  initGame();
+}
+
+// play again button
+playAgainBtn.addEventListener('click', () => {
+  initGame();
+});
+
+// Start
+initGame();
+
+</script>
+</body>
+</html>
