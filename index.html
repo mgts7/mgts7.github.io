@@ -7,14 +7,84 @@
 <style>
   /* === Basado en tu css: tipografías, color y estilo general (adaptado) === */
   :root{
-    --bg: #EAF7FB;
+    --bg: #f4f6f9;
     --panel-bg: #ffffff;
     --border: #000;
-    --accent: #6A5ADF; /* morado suave usado en elementos */
-    --correct: #b6f0b5;
-    --error: #ffd6d6;
+    --accent: #1f3c88;
+ /* morado suave usado en elementos */
+    --correct: #d4edda;
+    --error: #f8d7da;
   }
 
+  /* ===== HEADER INSTITUCIONAL ===== */
+
+.main-header {
+  max-width: 1000px;
+  margin: 0 auto 25px auto;
+  padding: 15px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+}
+
+.header-text {
+  text-align: left;
+  flex: 1;
+}
+
+.main-header h1 {
+  margin: 0;
+  font-size: 36px;
+  color: #2c3e50;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.subtitle {
+  margin-top: 6px;
+  font-size: 15px;
+  color: #666;
+}
+
+.header-image img {
+  width: 140px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 768px) {
+  .main-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .header-text {
+    text-align: center;
+  }
+
+  /* Retrato circular estilo clásico */
+.header-image img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+
+  border-radius: 50%;
+  border: 4px solid #2c3e50;
+
+  box-shadow: 
+    0 0 0 6px #ffffff, 
+    0 8px 20px rgba(0, 0, 0, 0.12);
+
+  background: #ddd;
+}
+}
   @font-face {
     font-family: "Moon";
     src: url("../fonts/Moon-Regular.woff2") format("woff2"),
@@ -30,12 +100,27 @@
     font-style: normal;
   }
 
-  *{ box-sizing: border-box; font-family: "Moon", Arial, sans-serif; text-align: center; -webkit-tap-highlight-color: transparent; }
-  body{
-    margin:0;
-    padding:20px;
-    background: var(--bg);
-    color: #111;
+  /* Reset limpio y profesional */
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+body::before {
+  content: "";
+  display: block;
+  height: 10px;
+  background: #2c3e50;
+  margin-bottom: 25px;
+}
+/* Diseño sobrio e institucional */
+  body {
+    margin: 0;
+    padding: 30px 20px;
+    font-family: Georgia, "Times New Roman", serif;
+    background: linear-gradient(to bottom, #f5f3ee, #e8ecf3);
+    color: #1f1f1f;
+    line-height: 1.6;
+    text-align: center;
   }
 
   /* Header / texto intro */
@@ -44,23 +129,62 @@
     margin: 0 auto;
     padding: 10px;
   }
-  h1{
-    display: inline-block;
-    padding: 8px 12px;
-    border: 2px solid var(--border);
-    border-radius: 8px;
-    background: var(--panel-bg);
-    margin: 8px auto;
-    font-weight: bold;
+  h1 {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  display: block;
+  color: #22303b;
+  font-weight: 700;
+}
+
+/* Header-specific: uso del espacio para un título grande y elegante */
+.main-header h1 {
+  margin: 0;
+  font-size: 44px;       /* tamaño grande para aprovechar el header */
+  line-height: 1.02;
+  color: #1f3c88;        /* color institucional */
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  padding: 0;
+  text-align: left;
+}
+
+/* Subtítulo más visible y espaciado */
+.main-header .subtitle {
+  margin-top: 8px;
+  font-size: 18px;       /* subtítulo más grande */
+  color: #55606a;
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+/* Ajustes responsivos para pantallas pequeñas */
+@media (max-width: 768px) {
+  .main-header h1 {
+    font-size: 28px;     /* reduce en móvil */
+    text-align: center;
   }
+  .main-header .subtitle {
+    font-size: 15px;
+    text-align: center;
+  }
+}
   p.lead{
-    margin: 12px auto 20px;
-    padding: 10px;
-    border: 2px solid var(--border);
-    border-radius:8px;
-    background: var(--panel-bg);
-    max-width: 820px;
-  }
+  margin: 25px auto 35px;
+  padding: 0 10px;
+  max-width: 760px;
+
+  background: transparent;
+  border: none;
+
+  font-size: 18px;
+  color: #444;
+  line-height: 1.7;
+
+  font-style: italic;
+}
 
   /* Juego: zonas y cajas */
   .game {
@@ -72,17 +196,18 @@
     margin: 10px 0 18px;
   }
 
-  .column {
-    border: 2px solid var(--border);
-    border-radius: 8px;
-    background: var(--panel-bg);
-    padding: 10px;
-    width: 420px;
-    max-width: 95%;
-    min-width: 240px;
-  }
 
-  .column h3{ margin: 0 0 8px; padding: 4px; font-size: 18px; }
+  .column {
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  background: #ffffff;
+  padding: 20px;
+  width: 420px;
+  max-width: 95%;
+  min-width: 240px;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
 
   .grid{
     display: grid;
@@ -91,36 +216,48 @@
     padding: 6px;
   }
 
-  .card{
-    border: 2px solid #222;
-    border-radius: 6px;
-    padding: 12px 10px;
-    cursor: pointer;
-    user-select: none;
-    transition: transform .15s ease, background-color .18s ease, opacity .3s ease;
-    background: white;
-    font-size: 16px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
+  .card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 14px;
+  padding: 18px 16px;
+  cursor: pointer;
+  user-select: none;
 
-  .card:hover{ transform: translateY(-3px); }
-  .card.selected{ outline: 3px solid rgba(106,90,205,0.15); transform: translateY(-2px); background: #f4f1ff;}
+  font-size: 17px;
+  line-height: 1.5;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: all 0.25s ease-in-out;
+}
+
+  .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
+}
+  .card.selected {
+  border-color: #2c3e50;
+  box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.15);
+  background: #f4f6f9;
+}
   .card.found{ background: var(--correct); color: #064b13; font-weight: bold; opacity: 0; pointer-events: none; transform: scale(.98); }
 
   /* Estilo que se aplica brevemente cuando es correcto (verde y desaparecer) */
   .card.correct {
-    background: #98e79a !important;
-    color: #064b13 !important;
-    border-color: #0a6b1a !important;
-    animation: vanish .6s forwards;
-  }
+  background: #d4edda !important;
+  border-color: #2e7d32 !important;
+  color: #1b5e20 !important;
+  animation: fadeElegant 0.6s forwards;
+}
 
-  @keyframes vanish {
-    0% { opacity: 1; transform: scale(1); }
-    100% { opacity: 0; transform: translateY(-8px) scale(.95); }
-  }
+  @keyframes fadeElegant {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: translateY(-6px) scale(0.97); }
+}
 
   /* Shake para error */
   .card.shake {
@@ -134,6 +271,18 @@
     80% { transform: translateX(4px); }
     100% { transform: translateX(0); }
   }
+  /* TRUE / FALSE feedback */
+.tf-correct {
+  background-color: #98e79a !important;
+  border: 2px solid #0a6b1a !important;
+  color: #064b13 !important;
+}
+
+.tf-wrong {
+  background-color: #ff8c8c !important;
+  border: 2px solid #8b0000 !important;
+  color: #5a0000 !important;
+}
 
   /* Vidas */
   .lives {
@@ -200,10 +349,29 @@
 </head>
 <body>
   <div class="container">
+    <header class="main-header">
+  
+  <div class="header-text">
     <h1>Las enseñanzas de Celso</h1>
+    <p class="subtitle">
+      Una actividad de reflexión histórica sobre las críticas de Celso al cristianismo
+    </p>
+  </div>
 
-    <p class="lead"><strong>Celso</strong> fue un filósofo griego del siglo II que escribió una de las primeras <strong>críticas</strong> completas contra el cristianismo. Selecciona una <strong>palabra</strong> y luego su <strong>definición</strong> según lo que decía Celso. Si <strong>fallas 2 veces</strong>, el juego se reinicia. Suerte!!!</p>
+  <div class="header-image">
+    <img src="celso.jpg" alt="Representación de Celso">
+  </div>
 
+</header>
+
+    <p class="lead"><strong>Celso</strong> fue un filósofo griego del siglo II que escribió una de las primeras <strong>críticas</strong> completas contra el cristianismo. 
+      Selecciona una <strong>palabra</strong> y luego su <strong>definición</strong> según lo que decía Celso. Luego responde, <strong>verdadero o falso.</strong> Si <strong>fallas 3 veces</strong>, el juego se reinicia. Suerte!!!</p>
+    <div style="text-align:center;">
+      <div><strong>Vidas</strong></div>
+      <div class="lives" id="livesBox"></div>
+      <div class="notice" id="notice" aria-live="polite"></div>
+    </div>
+    
     <div class="game" id="game">
       <div class="column" id="wordsColumn" aria-label="Palabras">
         <h3>Palabras</h3>
@@ -216,11 +384,7 @@
       </div>
     </div>
 
-    <div style="text-align:center;">
-      <div><strong>Vidas</strong></div>
-      <div class="lives" id="livesBox"></div>
-      <div class="notice" id="notice" aria-live="polite"></div>
-    </div>
+    
   </div>
 
   <!-- Overlay final -->
@@ -233,6 +397,26 @@
       </div>
     </div>
   </div>
+
+  <!-- True / False Mini Game Overlay -->
+<div class="overlay" id="tfOverlay">
+  <div class="modal">
+    <h2>Pregunta Extra</h2>
+    
+    <p id="tfQuestion" style="margin:12px 0; font-size:18px;">
+      <!-- WRITE YOUR TRUE/FALSE QUESTION TEXT HERE DYNAMICALLY -->
+    </p>
+
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button id="trueBtn" style="padding:8px 14px; font-weight:bold; border-radius:8px; cursor:pointer;">
+        Verdadero
+      </button>
+      <button id="falseBtn" style="padding:8px 14px; font-weight:bold; border-radius:8px; cursor:pointer;">
+        Falso
+      </button>
+    </div>
+  </div>
+</div>
 
   <div style="margin-top:40px; padding:15px; border:2px solid black; border-radius:8px; background:white;">
   <h3>Escanea para visitar esta página</h3>
@@ -259,10 +443,50 @@ const pairs = [
   { word: "Judaísmo", def: "Comunidad que afirma tener una relación especial con lo divino, pero que según Celso también presenta relatos y normas que pueden ponerse en duda." }
 ];
 
+// TRUE/FALSE QUESTIONS
+// ----------------------------------
+// WRITE YOUR EXTRA INFORMATION HERE
+// Set answer: true or false
+
+const trueFalseQuestions = {
+  0: {
+    question: "Para Celso, negarse a participar en las tradiciones públicas podía interpretarse como una amenaza al orden social.",
+    answer: true // <-- SET TRUE OR FALSE HERE
+  },
+  1: {
+    question: "Celso aceptaba que los relatos sobre esta figura eran coherentes y suficientes para demostrar su divinidad.",
+    answer: false // <-- SET TRUE OR FALSE HERE
+  },
+  2: {
+    question: "Celso pensaba que la religión esta fuertemente ligada con la politica.",
+    answer: true
+  },
+  3: {
+    question: "Celso afirmaba que los hechos extraordinarios debían pensarse racionalmente antes de aceptarlos como prueba divina.",
+    answer: true
+  },
+  4: {
+    question: "Celso pensaba que había pruebas suficientes para aceptar este hecho de la resurrección sin dudas.",
+    answer: false
+  },
+  5: {
+    question: "Según Celso, los seguidores eran personas mayormente de clase alta, educados y reflexivos.",
+    answer: false
+  },
+  6: {
+    question: "Celso apoyaba reemplazar rápidamente las costumbres antiguas, pero creía que el cristianismo no era la mejor opción.",
+    answer: false
+  },
+  7: {
+    question: "Celso utilizó argumentos judíos para criticar al cristianismo.",
+    answer: true
+  }
+};
+
 let state = {
   total: pairs.length,
   matched: 0,
-  lives: 2,
+  lives: 3,
   mistakes: 0,
   selectedWordId: null,
   selectedDefId: null,
@@ -278,6 +502,15 @@ const notice = document.getElementById('notice');
 const overlay = document.getElementById('overlay');
 const playAgainBtn = document.getElementById('playAgainBtn');
 
+const tfOverlay = document.getElementById('tfOverlay');
+const tfQuestion = document.getElementById('tfQuestion');
+const trueBtn = document.getElementById('trueBtn');
+const falseBtn = document.getElementById('falseBtn');
+
+let currentTFAnswer = null;
+let pendingMatch = null;
+
+
 function shuffle(arr){
   for(let i = arr.length -1; i>0; i--){
     const j = Math.floor(Math.random()*(i+1));
@@ -289,7 +522,7 @@ function shuffle(arr){
 function initGame(){
   // reset state
   state.matched = 0;
-  state.lives = 2;
+  state.lives = 3;
   state.mistakes = 0;
   state.selectedWordId = null;
   state.selectedDefId = null;
@@ -343,7 +576,7 @@ function initGame(){
 
 function renderLives(){
   livesBox.innerHTML = "";
-  for(let i=0;i<2;i++){
+  for(let i=0;i<3;i++){
     const h = document.createElement('div');
     h.className = 'heart';
     h.innerHTML = '❤';
@@ -430,23 +663,12 @@ function evaluatePair(){
   const correct = (state.mapping[wId] === dId);
 
   if(correct){
-    // mark correct: both become green and disappear
-    wordEl.classList.remove('selected');
-    defEl.classList.remove('selected');
+     // Pause normal flow and show True/False question
+  pendingMatch = { wordEl, defEl, wId };
 
-    wordEl.classList.add('correct');
-    defEl.classList.add('correct');
+  showTrueFalseQuestion(wId);
 
-    // after animation, mark as found/invisible
-    setTimeout(()=>{
-      wordEl.classList.add('found');
-      defEl.classList.add('found');
-      wordEl.style.display = 'none';
-      defEl.style.display = 'none';
-    }, 600);
-
-    state.matched++;
-    clearSelections();
+  clearSelections();
 
     // check win
     if(state.matched >= state.total){
@@ -487,6 +709,87 @@ function evaluatePair(){
   }
 }
 
+function showTrueFalseQuestion(wordId){
+
+  const tfData = trueFalseQuestions[wordId];
+
+  if(!tfData) return;
+
+  tfQuestion.textContent = tfData.question;
+  currentTFAnswer = tfData.answer;
+
+  tfOverlay.classList.add('show');
+}
+
+function handleTFAnswer(playerAnswer){
+
+  const selectedBtn = playerAnswer ? trueBtn : falseBtn;
+  const correctBtn = currentTFAnswer ? trueBtn : falseBtn;
+
+  // Si acierta
+  if(playerAnswer === currentTFAnswer){
+
+    selectedBtn.classList.add('tf-correct');
+
+  } else {
+
+    selectedBtn.classList.add('tf-wrong');
+    correctBtn.classList.add('tf-correct'); // muestra cuál era la correcta
+
+    // pierde vida
+    state.lives--;
+    renderLives();
+    if(state.lives <= 0){
+      setTimeout(() => {
+      tfOverlay.classList.remove('show');
+      resetAll();
+      }, 800); // pequeño tiempo para que se vea el resultado
+      return; // importante: detener ejecución
+  }
+  }
+
+  // Esperar 800ms para que se vea el color
+  setTimeout(() => {
+
+    tfOverlay.classList.remove('show');
+
+    // limpiar colores botones
+    trueBtn.classList.remove('tf-correct','tf-wrong');
+    falseBtn.classList.remove('tf-correct','tf-wrong');
+
+    // 🔥 AHORA SIEMPRE desaparece la pareja
+    const { wordEl, defEl } = pendingMatch;
+
+    wordEl.classList.add('correct');
+    defEl.classList.add('correct');
+
+    setTimeout(()=>{
+      wordEl.classList.add('found');
+      defEl.classList.add('found');
+      wordEl.style.display = 'none';
+      defEl.style.display = 'none';
+    }, 600);
+
+    state.matched++;
+
+    if(state.lives <= 0){
+      setTimeout(()=> {
+        resetAll();
+      }, 600);
+      return;
+    }
+
+    if(state.matched >= state.total){
+      setTimeout(() => {
+        overlay.classList.add('show');
+      }, 600);
+    }
+
+    pendingMatch = null;
+
+  }, 800);
+}
+
 function resetAll(){
   // re-show all cards and reshuffle
   // For a full reset, reinitialize game
@@ -496,6 +799,15 @@ function resetAll(){
 // play again button
 playAgainBtn.addEventListener('click', () => {
   initGame();
+});
+
+
+trueBtn.addEventListener('click', () => {
+  handleTFAnswer(true);
+});
+
+falseBtn.addEventListener('click', () => {
+  handleTFAnswer(false);
 });
 
 // Start
